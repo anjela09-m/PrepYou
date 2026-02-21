@@ -1,0 +1,426 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --admin-bg: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --accent-indigo: #6366f1;
+    --accent-cyan: #22d3ee;
+    --accent-purple: #a855f7;
+    --accent-emerald: #10b981;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: rgba(148, 163, 184, 0.1);
+}
+
+.admin-page-container {
+    min-height: 100vh;
+    background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    padding-top: 80px;
+    /* Navbar height */
+}
+
+.admin-main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.admin-header-section {
+    margin-bottom: 3rem;
+}
+
+.header-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #fff, var(--accent-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-text p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    padding: 1.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+.card-indigo .card-icon {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-indigo);
+}
+
+.card-cyan .card-icon {
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--accent-cyan);
+}
+
+.card-purple .card-icon {
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--accent-purple);
+}
+
+.card-emerald .card-icon {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-emerald);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-subtext {
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+/* Progress Cell */
+.progress-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.progress-cell .percent {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.mini-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.mini-bar .fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1s ease-out;
+}
+
+/* Badge Admin */
+.tabs-navigation {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(15, 23, 42, 0.5);
+    padding: 0.5rem;
+    border-radius: 16px;
+    width: fit-content;
+    border: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    background: var(--accent-indigo);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Premium Table */
+.table-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.premium-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.premium-table th {
+    text-align: left;
+    padding: 1.25rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.premium-table td {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.premium-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* User Cell */
+.user-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-cyan);
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+}
+
+.details .name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.details .email {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Badges & Pills */
+.role-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.role-badge.admin {
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--accent-purple);
+}
+
+.role-badge.user {
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--accent-cyan);
+}
+
+.status-pill {
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.status-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status-pill.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-emerald);
+}
+
+.status-pill.active::before {
+    background: var(--accent-emerald);
+}
+
+.status-pill.blocked {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.status-pill.blocked::before {
+    background: #ef4444;
+}
+
+.active-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Action Buttons */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.action-btn.block {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.action-btn.block:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.action-btn.unblock {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-emerald);
+}
+
+.action-btn.unblock:hover {
+    background: var(--accent-emerald);
+    color: white;
+}
+
+/* Level Badges */
+.level-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.level-badge.beginner {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.level-badge.intermediate {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.level-badge.advanced {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.empty-state {
+    padding: 4rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.admin-loading {
+    height: 100vh;
+    background: var(--admin-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    gap: 1.5rem;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--accent-indigo);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

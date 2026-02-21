@@ -1,41 +1,42 @@
 const express = require("express");
 const router = express.Router();
 
-// Controllers
 const {
   generateTodayPlan,
-  deleteTodayPlan,
   regenerateTodayPlan,
+  acceptPlan,
+  deleteTodayPlan,
   completeTask,
   completeAllTasks,
+  submitDay,
 } = require("../controllers/planController");
 
-// Auth middleware
 const { protect } = require("../middleware/authMiddleware");
 
-// ==========================================
-// Get OR generate today's plan (Gemini AI)
-// ==========================================
-router.get("/today", protect, generateTodayPlan);
 
-// ==========================================
-// Delete today's plan
-// ==========================================
+router.post("/today", protect, generateTodayPlan);
+
+
+router.post("/today/regenerate", protect, regenerateTodayPlan);
+
+
+router.post("/today/accept", protect, acceptPlan);
+
+
 router.delete("/today", protect, deleteTodayPlan);
 
-// ==========================================
-// Regenerate today's plan (with user prompt)
-// ==========================================
-router.post("/regenerate", protect, regenerateTodayPlan);
 
-// ==========================================
-// Mark ONE task as completed
-// ==========================================
-router.put("/complete/:planId/:taskId", protect, completeTask);
+router.patch("/:planId/task/:taskId", protect, completeTask);
 
-// ==========================================
-// Mark ALL tasks as completed
-// ==========================================
-router.put("/completeAll/:planId", protect, completeAllTasks);
+
+router.patch("/:planId/complete", protect, completeAllTasks);
+
+// Submit today's day (LOCK & FINALIZE)
+router.post("/today/submit", protect, submitDay);
+
+router.get("/test", (req, res) => {
+  res.json({ ok: true });
+});
+
 
 module.exports = router;

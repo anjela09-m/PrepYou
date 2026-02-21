@@ -1,21 +1,27 @@
-import axios from "axios";
+import API from "../services/api";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api",
-});
+// Create goal
+export const createGoal = (goalData) => API.post("/goals", goalData);
 
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
-  }
-  return req;
-});
+// Get active goal
+export const getActiveGoal = async () => {
+    try {
+        return await API.get("/goals/active");
+    } catch (error) {
+        if (error.response?.status === 404) return { data: null };
+        throw error;
+    }
+};
 
-// Create goal → Backend AI generates skills + plan
-export const createGoal = (goalData) =>
-  API.post("/goal", goalData);
+// Accept goal summary
+export const acceptGoal = (id) => API.post(`/goals/${id}/accept`);
 
-// (Optional for later)
-export const getMyGoals = () =>
-  API.get("/goal/my");
+// Regenerate goal summary
+export const regenerateGoalPlan = (id, prompt) => API.post(`/goals/${id}/regenerate`, { prompt });
+
+// Update goal
+export const updateGoal = (id, goalData) => API.put(`/goals/${id}`, goalData);
+
+// Delete goal
+export const deleteGoal = (id) => API.delete(`/goals/${id}`);
+

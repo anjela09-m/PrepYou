@@ -18,7 +18,7 @@ const goalSchema = new mongoose.Schema(
     },
     preparationMode: {
       type: String,
-      enum: ["placement", "competitive", "skill-switch", "interview"],
+      enum: ["placement", "competitive", "skill-switch", "interview", "competitive-exam", "language-cert", "other"],
       required: true,
     },
     level: {
@@ -27,12 +27,12 @@ const goalSchema = new mongoose.Schema(
       required: true,
     },
     skills: [
-  {
-    name: { type: String, required: true },
-    priority: { type: Number, required: true } 
-  }
-]
-,
+      {
+        name: { type: String, required: true },
+        priority: { type: Number, required: true }
+      }
+    ]
+    ,
     weekdayHours: {
       type: Number,
       required: true,
@@ -41,14 +41,35 @@ const goalSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    dayEndTime: {
+      type: String, // "21:00" format
+      required: true,
+      default: "21:00"
+    },
     deadline: {
       type: Date,
       required: true,
+    },
+    duration: {
+      type: String,
+    },
+    summaryPlan: {
+      weeklyStructure: [Object],
+      focusAreas: [String],
+      skillDistribution: [Object],
+      dailyEffort: String,
+      strategy: String,
+    },
+    status: {
+      type: String,
+      enum: ["draft", "accepted"],
+      default: "draft",
     },
     isActive: {
       type: Boolean,
       default: true,
     },
+    weakAreas: [String],
   },
   { timestamps: true }
 );

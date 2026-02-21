@@ -29,7 +29,17 @@ const progressSchema = new mongoose.Schema(
       default: 0,
     },
 
-    completionRate: {
+    pendingTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    rolledOverTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    completionPercentage: {
       type: Number, // percentage
       default: 0,
     },

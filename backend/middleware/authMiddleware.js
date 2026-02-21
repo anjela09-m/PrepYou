@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   if (
@@ -12,7 +12,17 @@ const protect = (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = { id: decoded.id };
+      // Fetch user with role
+      const User = require("../models/User");
+      req.user = await User.findById(decoded.id).select("-password");
+
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authorized, user not found" });
+      }
+
+      if (req.user.isBlocked) {
+        return res.status(403).json({ message: "Your account has been blocked. Please contact support." });
+      }
 
       next();
     } catch (error) {
@@ -26,4 +36,12 @@ const protect = (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as an admin" });
+  }
+};
+
+module.exports = { protect, admin };

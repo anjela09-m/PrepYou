@@ -33,6 +33,10 @@ exports.updateUserSettings = async (req, res) => {
     if (preparationMode) user.preparationMode = preparationMode;
     if (level) user.level = level;
     if (dailyTime) user.dailyTime = dailyTime;
+    if (req.body.reminders) user.reminders = req.body.reminders;
+    if (req.body.preferences) {
+      user.preferences = { ...user.preferences, ...req.body.preferences };
+    }
 
     await user.save();
 

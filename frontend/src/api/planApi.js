@@ -1,33 +1,31 @@
-import axios from "axios";
+import API from "../services/api";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api",
-});
-
-// Attach token automatically
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
+// Get/Generate today's plan
+export const getTodayPlan = async () => {
+  try {
+    return await API.post("/plans/today");
+  } catch (error) {
+    if (error.response?.status === 404) return { data: null };
+    throw error;
   }
-  return req;
-});
+};
 
-// Get today's AI-generated plan
-export const getTodayPlan = () => API.get("/plan/today");
+// Regenerate plan
+export const regeneratePlan = (prompt = "") => API.post("/plans/today/regenerate", { prompt });
+
+// Accept today's plan
+export const acceptPlan = () => API.post("/plans/today/accept");
 
 // Complete a single task
 export const completeTask = (planId, taskId) =>
-  API.put(`/plans/complete/${planId}/${taskId}`);
+  API.patch(`/plans/${planId}/task/${taskId}`);
 
 // Complete all tasks
 export const completeAllTasks = (planId) =>
-  API.put(`/plans/completeAll/${planId}`);
+  API.patch(`/plans/${planId}/complete`);
 
-// Delete a single task
-export const deleteTask = (planId, taskId) =>
-  API.delete(`/plans/${planId}/tasks/${taskId}`);
+// Submit today's day (LOCK & FINALIZE)
+export const submitDay = () => API.post("/plans/today/submit");
 
-// Regenerate plan with optional user prompt
-export const regeneratePlan = (planId, prompt = "") =>
-  API.post(`/plans/regenerate/${planId}`, { prompt });
+// Delete today's plan
+export const deleteTodayPlan = () => API.delete("/plans/today");

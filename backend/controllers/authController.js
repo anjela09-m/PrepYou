@@ -2,10 +2,10 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// REGISTER USER
+
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, preferredStudyTime, targetType } = req.body;
 
     // 1. Check if user already exists
     const userExists = await User.findOne({ email });
@@ -22,6 +22,19 @@ exports.registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      preferredStudyTime,
+      targetType,
+    });
+
+    // 3.5 Create Default Subscription
+    const Subscription = require("../models/Subscription");
+    await Subscription.create({
+      user: user._id,
+      planType: "free",
+      status: "active",
+      usageLimit: 5,
+      usageCount: 0,
+      lastResetDate: new Date()
     });
 
     // 4. Generate JWT
@@ -62,6 +75,15 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    // Check if blocked
+    if (user.isBlocked) {
+      return res.status(403).json({ message: "Your account has been blocked. Please contact support." });
+    }
+
+    // Update lastActiveAt
+    user.lastActiveAt = new Date();
+    await user.save();
+
     // 3. Generate JWT
     const token = jwt.sign(
       { id: user._id },
@@ -76,8 +98,19 @@ exports.loginUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role, // Added role
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// GET CURRENT USER
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json({ user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
