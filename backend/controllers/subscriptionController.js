@@ -108,8 +108,12 @@ const verifyPayment = async (req, res) => {
 
             if (planDuration === "yearly") {
                 endDate.setFullYear(startDate.getFullYear() + 1); // 1 Year Validity
+                subscription.planDuration = "yearly";
+                subscription.amountPaid = 1599;
             } else {
                 endDate.setDate(startDate.getDate() + 30); // 30 Days Validity (Monthly)
+                subscription.planDuration = "monthly";
+                subscription.amountPaid = 199;
             }
 
             subscription.planType = "pro";

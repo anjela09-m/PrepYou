@@ -24,6 +24,15 @@ const subscriptionSchema = new mongoose.Schema({
     endDate: {
         type: Date
     },
+    planDuration: {
+        type: String,
+        enum: ["monthly", "yearly"],
+        default: "monthly"
+    },
+    amountPaid: {
+        type: Number,
+        default: 0
+    },
     paymentId: {
         type: String
     },

@@ -60,4 +60,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+userSchema.index({ role: 1 });
+userSchema.index({ lastActiveAt: -1 });
+
 module.exports = mongoose.model("User", userSchema);

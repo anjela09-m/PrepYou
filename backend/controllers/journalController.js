@@ -1,5 +1,6 @@
 const Journal = require("../models/Journal");
-const { generateSentimentWithAI } = require("../services/aiService");
+const Goal = require("../models/Goal");
+const { generateSentimentWithAI, generatePersonalizedMotivationWithAI } = require("../services/aiService");
 const Subscription = require("../models/Subscription");
 
 // @desc    Create journal entry
@@ -46,9 +47,25 @@ const createJournalEntry = async (req, res) => {
             date: new Date(),
         });
 
+        // Generate motivational quote
+        let motivationalQuote = "";
+        try {
+            const activeGoal = await Goal.findOne({ user: req.user.id, isActive: true });
+            motivationalQuote = await generatePersonalizedMotivationWithAI({
+                goalTitle: activeGoal ? activeGoal.title : "Your Journey",
+                completedToday: 0, 
+                totalToday: 0,
+                sentiment: sentiment
+            });
+        } catch (err) {
+            console.error("Motivation error", err);
+            motivationalQuote = "Keep pushing forward, every step matters!";
+        }
+
         res.status(201).json({
             ...journal.toObject(),
             sentimentSkipped,
+            motivationalQuote,
             usageCount: req.subscription ? req.subscription.usageCount : 0,
             usageLimit: req.subscription ? req.subscription.usageLimit : 10
         });

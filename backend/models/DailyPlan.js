@@ -46,4 +46,8 @@ const dailyPlanSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+dailyPlanSchema.index({ user: 1, date: -1 });
+dailyPlanSchema.index({ goal: 1 });
+dailyPlanSchema.index({ status: 1 });
+
 module.exports = mongoose.model("DailyPlan", dailyPlanSchema);

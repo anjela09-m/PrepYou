@@ -383,13 +383,14 @@ Progress today: ${completedToday}/${totalToday} tasks completed.
 User Sentiment from Journal: ${sentiment}.
 
 Instructions:
+- MUST BE IN ENGLISH ONLY, regardless of the goal subject.
 - If sentiment is 'stressed', be calming and reassuring.
 - If sentiment is 'motivated', be high-energy.
 - If they haven't started (0 tasks), be very encouraging.
 - If they are half way, keep the momentum.
 - If they are almost done, celebrate.
 
-Return ONLY the text of the motivation. Keep it under 20 words.
+Return ONLY the text of the motivation in English. Keep it under 20 words.
 `;
 
     const response = await axios.post(
@@ -424,9 +425,9 @@ Return ONLY the word in lowercase.
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "mistralai/mistral-7b-instruct",
+        model: "google/gemini-2.0-flash-001",
         messages: [{ role: "user", content: prompt }],
-        temperature: 0.3,
+        temperature: 0.1,
       },
       {
         headers: {
@@ -436,7 +437,15 @@ Return ONLY the word in lowercase.
       }
     );
 
-    const content = response.data.choices[0].message.content.toLowerCase().trim();
+    let content = response.data.choices[0].message.content.toLowerCase().trim();
+    // Aggressive sanitization (remove quotes, punctuation, newlines)
+    content = content.replace(/[^a-z]/g, "");
+    
+    // Explicit mapping to catch slight variations
+    if (content.includes("motivat") || content.includes("excit") || content.includes("success")) return "motivated";
+    if (content.includes("stress") || content.includes("anxi") || content.includes("overwhelm")) return "stressed";
+    if (content.includes("demotivat") || content.includes("sad") || content.includes("exhaust")) return "demotivated";
+    
     if (["motivated", "neutral", "stressed", "demotivated"].includes(content)) {
       return content;
     }

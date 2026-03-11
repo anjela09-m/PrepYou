@@ -72,9 +72,19 @@ const updateProgressAfterTask = async (userId, goalId, date) => {
 
     await progress.save();
 
-    // 🔹 Update user lastActiveAt
+    // 🔹 Update user lastActiveAt and recalculate global stats
     const User = require("../models/User");
-    await User.findByIdAndUpdate(userId, { lastActiveAt: new Date() });
+    
+    // Recalculate global stats for the user
+    const allProgress = await Progress.find({ user: userId });
+    const totalCompletedTasksOverall = allProgress.reduce((sum, p) => sum + p.completedTasks, 0);
+    const activeDaysCount = allProgress.length;
+
+    await User.findByIdAndUpdate(userId, { 
+      lastActiveAt: new Date(),
+      'stats.tasksCompleted': totalCompletedTasksOverall,
+      'stats.daysActive': activeDaysCount
+    });
 
   } catch (error) {
     console.error("Progress update error:", error.message);

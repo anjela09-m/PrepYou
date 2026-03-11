@@ -74,4 +74,7 @@ const goalSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+goalSchema.index({ user: 1, isActive: -1 });
+goalSchema.index({ preparationMode: 1 });
+
 module.exports = mongoose.model("Goal", goalSchema);
