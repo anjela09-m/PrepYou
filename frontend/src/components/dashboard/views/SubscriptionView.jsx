@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { createOrder, verifyPayment, getSubscriptionStatus } from "../../../api/subscriptionApi";
 
-const SubscriptionView = () => {
+const SubscriptionView = ({ onUpdate }) => {
     const [loading, setLoading] = useState(false);
     const [subData, setSubData] = useState(null);
     const [planDuration, setPlanDuration] = useState("monthly");
@@ -65,6 +65,7 @@ const SubscriptionView = () => {
                         });
                         toast.success(verifyRes.data.message);
                         fetchStatus(); // Refresh UI
+                        if (onUpdate) onUpdate();
                     } catch (error) {
                         toast.error("Payment verification failed");
                     }

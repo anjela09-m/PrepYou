@@ -129,9 +129,9 @@ const Dashboard = () => {
       case "settings":
         return <SettingsView />;
       case "subscription":
-        return <SubscriptionView />;
+        return <SubscriptionView onUpdate={() => fetchData(true)} setView={setView} />;
       case "profile":
-        return <ProfileView user={user} activeGoal={activeGoal} />;
+        return <ProfileView user={user} activeGoal={activeGoal} subscription={subscription} />;
       default:
         return <DashboardOverview user={user} goal={activeGoal} plan={dailyPlan} setView={setView} summary={summary} latestJournal={latestJournal} subscription={subscription} onUpdate={fetchData} />;
     }

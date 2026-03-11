@@ -1,48 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --admin-bg: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --accent-indigo: #6366f1;
-    --accent-cyan: #22d3ee;
-    --accent-purple: #a855f7;
-    --accent-emerald: #10b981;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border-color: rgba(148, 163, 184, 0.1);
+    --bg-main: #FFF7CD;
+    --bg-card: #FDC3A1;
+    --text-primary: #8A244B;
+    --text-secondary: rgba(138, 36, 75, 0.7);
+    --border-color: rgba(138, 36, 75, 0.1);
+    
+    --status-success: #10b981;
+    --status-warning: #f59e0b;
+    --status-error: #ef4444;
+    --status-info: #8A244B;
+
+    --button-bg: #FB9B8F;
+    --card-hover-bg: #FADA7A;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
 .admin-page-container {
     min-height: 100vh;
-    background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
-    color: var(--text-main);
-    font-family: 'Outfit', sans-serif;
-    padding-top: 80px;
-    /* Navbar height */
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .admin-main {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 1400px;
+    padding: 2.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .admin-header-section {
     margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .header-text h1 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #fff, var(--accent-cyan));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
 }
 
 .header-text p {
-    color: var(--text-muted);
+    color: var(--text-secondary);
     font-size: 1.1rem;
 }
 
@@ -55,15 +63,22 @@
 }
 
 .stat-card {
-    background: var(--card-bg);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
     padding: 1.75rem;
-    border-radius: 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.5rem;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card:hover {
+    background: var(--card-hover-bg);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
 .card-icon {

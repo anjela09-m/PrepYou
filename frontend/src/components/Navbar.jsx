@@ -17,7 +17,7 @@ const Navbar = ({ onDashboardAction }) => {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3 group">
+            <Link to="/" className="flex items-center space-x-3 group mr-4">
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-brand-indigo/20 group-hover:scale-110 transition-transform duration-300">
                 <Logo className="w-6 h-6 text-white" />
               </div>
@@ -25,6 +25,11 @@ const Navbar = ({ onDashboardAction }) => {
                 PrepYou
               </span>
             </Link>
+            {user?.role === "admin" && (
+              <Link to="/admin-dashboard" className="text-xs font-bold text-[#8A244B] hover:text-[#8A244B]/70 transition-all px-3 py-1 bg-[#FDC3A1] rounded-lg border border-[#FB9B8F] shadow-sm ml-2">
+                Admin Panel
+              </Link>
+            )}
           </div>
 
           <div className="hidden md:flex md:items-center md:space-x-10">
@@ -40,11 +45,6 @@ const Navbar = ({ onDashboardAction }) => {
                 >
                   Dashboard
                 </Link>
-                {user.role === "admin" && (
-                  <Link to="/admin-dashboard" className="text-sm font-bold text-secondary hover:text-primary transition-all px-3 py-1 bg-brand-indigo/5 rounded-lg border border-brand-indigo/10">
-                    Admin Panel
-                  </Link>
-                )}
                 <div className="h-6 w-px bg-gray-100"></div>
                 <button
                   onClick={handleLogout}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { completeTask, submitDay as submitDayAPI, regeneratePlan } from "../../../api/planApi";
 import UIModal from "../../common/UIModal";
+import confetti from "canvas-confetti";
 
 const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, subscription, onUpdate }) => {
     const [loading, setLoading] = useState(false);
@@ -64,7 +65,7 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
         }
     }, [plan?.tasks]);
 
-    const handleToggleTask = async (taskId) => {
+    const handleToggleTask = async (taskId, e) => {
         if (plan?.status === "SUBMITTED") {
             toast?.error("This day is finalized.");
             return;
@@ -76,6 +77,25 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
             t._id === taskId ? { ...t, isCompleted: !t.isCompleted } : t
         );
         setOptimisticTasks(newTasks);
+
+        // Check if we just completed the last task
+        const totalTasks = newTasks.length;
+        const completeTasksCount = newTasks.filter(t => t.isCompleted).length;
+        const taskObj = optimisticTasks.find(t => t._id === taskId);
+        
+        if (completeTasksCount === totalTasks && !taskObj.isCompleted) {
+            // Exploding fireworks!
+            const rect = e.target.getBoundingClientRect();
+            const x = (rect.left + rect.width / 2) / window.innerWidth;
+            const y = (rect.top + rect.height / 2) / window.innerHeight;
+            
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { x, y },
+                colors: ['#34D399', '#10B981', '#059669', '#FDE68A', '#FBBF24']
+            });
+        }
 
         try {
             await completeTask(plan._id, taskId);
@@ -97,13 +117,18 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
         try {
             await submitDayAPI();
             onUpdate();
-            closeModal();
+            // Instead of standard Day Complete, immediately prompt Journal
             setModal({
                 isOpen: true,
-                type: "alert",
-                title: "Day Complete!",
-                message: "Great job! Your progress has been logged and pending tasks rolled over.",
-                onConfirm: () => closeModal()
+                type: "confirm",
+                title: "Day Locked In! 🔒",
+                message: "Great job completing today! Would you like to quickly jump into your Daily Journal to reflect on your progress?",
+                confirmText: "Write Now",
+                cancelText: "Maybe Later",
+                onConfirm: () => {
+                    setView("journal");
+                    closeModal();
+                }
             });
         } catch (error) {
             closeModal();
@@ -122,8 +147,9 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
             isOpen: true,
             type: "confirm",
             title: "Finish Day?",
-            message: "This will lock today's progress and roll over any pending tasks to tomorrow. Are you sure?",
+            message: "This will lock today's progress and roll over any pending tasks to tomorrow. Are you ready?",
             confirmText: "Yes, Finish Day",
+            cancelText: "Cancel",
             onConfirm: handleFinishDay
         });
     };
@@ -170,7 +196,8 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
                 onClose={closeModal}
                 isLoading={modal.isLoading}
                 confirmText={modal.confirmText}
-                inputPlaceholder={modal.inputPlaceholder} // Fixed prop passing
+                cancelText={modal.cancelText}
+                inputPlaceholder={modal.inputPlaceholder} 
             />
 
             {!goal ? (
@@ -207,8 +234,8 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
                 </div>
             ) : (
                 <div className="space-y-8">
-                    {/* 1. Header Section (Clean Style - Burnt Peach) */}
-                    <div className="bg-[#FFF5F0] p-8 md:p-10 rounded-[3rem] border border-stone-100 shadow-xl shadow-orange-100/30 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    {/* 1. Header Section (Clean Style - Pastel Green) */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 md:p-10 rounded-[3rem] border border-emerald-100/50 shadow-xl shadow-teal-100/30 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8">
                         <div className="relative z-10 space-y-4 max-w-2xl">
                             <div>
                                 <h1 className="text-2xl md:text-4xl font-black text-text-primary tracking-tighter leading-tight">
@@ -285,7 +312,7 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
                                             <input
                                                 type="checkbox"
                                                 checked={task.isCompleted}
-                                                onChange={() => handleToggleTask(task._id)}
+                                                onChange={(e) => handleToggleTask(task._id, e)}
                                                 disabled={loading || plan.status === "SUBMITTED"}
                                                 className="w-8 h-8 rounded-xl border-2 border-gray-200 text-primary focus:ring-primary focus:ring-offset-0 transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                                             />
@@ -326,7 +353,7 @@ const DashboardOverview = ({ user, goal, plan, setView, summary, latestJournal, 
                     </div>
 
                     {/* 4. Progress Overview & Actions - Light Mist bg */}
-                    <div className="bg-[#FDFBF7] p-8 rounded-[2.5rem] border border-stone-100 mt-8">
+                    <div className="bg-gradient-to-br from-teal-50/50 to-emerald-50/50 p-8 rounded-[2.5rem] border border-emerald-100/50 mt-8 shadow-sm">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-bold text-text-primary tracking-tight">Progress Overview</h3>
                             <span className="px-4 py-2 bg-white rounded-xl text-xs font-bold text-primary shadow-sm border border-gray-100">{stats.percentage}% Completed</span>
